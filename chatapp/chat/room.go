@@ -1,7 +1,7 @@
 package main
 
 import (
-	"ch1/trace"
+	"chatapp/trace"
 	"log"
 	"net/http"
 
@@ -20,6 +20,8 @@ type room struct {
 	clients map[*client]bool
 	// tracer receive log
 	tracer trace.Tracer
+	// avatar is information of avatar
+	avatar Avatar
 }
 
 func (r *room) run() {
