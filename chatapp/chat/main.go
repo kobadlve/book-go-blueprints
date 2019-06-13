@@ -15,6 +15,12 @@ import (
 	"github.com/stretchr/objx"
 )
 
+var avatars Avatar = TryAvatars{
+	UseFileSystemAvatar,
+	UserAuthAvatar,
+	UseGravatar,
+}
+
 type templateHandler struct {
 	once     sync.Once
 	filename string
@@ -46,7 +52,6 @@ func newRoom(avatar Avatar) *room {
 		leave:   make(chan *client),
 		clients: make(map[*client]bool),
 		tracer:  trace.Off(),
-		avatar:  avatar,
 	}
 }
 
@@ -59,7 +64,7 @@ func main() {
 		google.New("xxx", "xxx", "http://localhost:8080/auth/callback/google"),
 	)
 
-	r := newRoom(UseGravatar)
+	r := newRoom(UseFileSystemAvatar)
 	r.tracer = trace.New(os.Stdout)
 	http.Handle("/chat", MustAuth(&templateHandler{filename: "chat.html"}))
 	http.Handle("/login", &templateHandler{filename: "login.html"})
@@ -75,6 +80,9 @@ func main() {
 		w.Header()["Location"] = []string{"/chat"}
 		w.WriteHeader(http.StatusTemporaryRedirect)
 	})
+	http.Handle("/upload", &templateHandler{filename: "upload.html"})
+	http.HandleFunc("/uploader", uploaderHandler)
+	http.Handle("/avatars/", http.StripPrefix("/avatars/", http.FileServer(http.Dir("./avatars"))))
 	go r.run()
 	log.Println("Start web server port: ", *addr)
 	if err := http.ListenAndServe(*addr, nil); err != nil {
