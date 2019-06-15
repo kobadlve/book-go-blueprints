@@ -1,11 +1,11 @@
 package main
 
 import (
-	"chatapp/trace"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/websocket"
+	"github.com/kobadlve/book-go-blueprints/chatapp/trace"
 	"github.com/stretchr/objx"
 )
 

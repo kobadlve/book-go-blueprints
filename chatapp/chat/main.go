@@ -1,7 +1,6 @@
 package main
 
 import (
-	"chatapp/trace"
 	"flag"
 	"html/template"
 	"log"
@@ -10,6 +9,7 @@ import (
 	"path/filepath"
 	"sync"
 
+	"github.com/kobadlve/book-go-blueprints/chatapp/trace"
 	"github.com/stretchr/gomniauth"
 	"github.com/stretchr/gomniauth/providers/google"
 	"github.com/stretchr/objx"
